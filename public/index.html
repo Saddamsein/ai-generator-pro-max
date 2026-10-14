@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Generator Pro Max</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#101322;color:white;padding:20px}
+.container{max-width:700px;margin:30px auto;background:#1b2035;padding:25px;border-radius:18px}
+h1{text-align:center;color:#8b9cff}
+p{text-align:center;color:#c7cbe0}
+label{display:block;margin-top:18px;margin-bottom:8px}
+select,textarea,input,button{width:100%;padding:13px;border-radius:9px;border:1px solid #414969;font-size:16px}
+select,textarea,input{background:#101629;color:white}
+textarea{height:120px;resize:vertical}
+button{margin-top:15px;background:#6578ff;color:white;font-weight:bold;border:0;cursor:pointer}
+#hasil{margin-top:20px;padding:15px;background:#101629;border-radius:10px;white-space:pre-wrap;min-height:70px}
+footer{text-align:center;color:#9299b7;font-size:12px;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>✨ AI GENERATOR PRO MAX</h1>
+<p>Asisten AI pintar untuk membantu pekerjaan Anda</p>
+
+<label for="jenis">Pilih kebutuhan</label>
+<select id="jenis">
+<option>Asisten AI</option>
+<option>Buat caption media sosial</option>
+<option>Buat artikel</option>
+<option>Buat ide bisnis</option>
+<option>Buat prompt gambar</option>
+<option>Bantu belajar</option>
+</select>
+
+<label for="prompt">Apa yang ingin Anda buat?</label>
+<textarea id="prompt" placeholder="Tuliskan pertanyaan atau ide Anda di sini..."></textarea>
+
+<button onclick="buatAI()">✨ Buat Sekarang</button>
+<div id="hasil">Hasil AI akan muncul di sini.</div>
+<footer>AI GENERATOR PRO MAX</footer>
+</div>
+
+<script>
+async function buatAI(){
+const prompt=document.getElementById('prompt').value.trim();
+const jenis=document.getElementById('jenis').value;
+const hasil=document.getElementById('hasil');
+
+if(!prompt){
+hasil.textContent='Silakan tuliskan pertanyaan atau ide terlebih dahulu.';
+return;
+}
+
+hasil.textContent='Sedang memproses...';
+
+try{
+const response=await fetch('/api/generate',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({prompt:jenis+': '+prompt})
+});
+
+const data=await response.json();
+
+if(!response.ok) throw new Error(data.error||'Permintaan gagal.');
+hasil.textContent=data.output||data.text||'Tidak ada hasil yang dikembalikan.';
+}catch(error){
+hasil.textContent='Belum dapat terhubung ke AI. Pastikan server dan API AI sudah dikonfigurasi. Detail: '+error.message;
+}
+}
+</script>
+</body>
+</html>
