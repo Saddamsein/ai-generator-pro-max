@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111827">
+<title>AI Generator Pro Max</title>
+<style>
+:root{--bg:#0b1020;--panel:#131b2e;--line:#293752;--text:#f5f7ff;--muted:#aab6ce;--a:#805dff;--b:#27d4b2}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#202d59 0,#0b1020 58%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}.wrap{max-width:1000px;margin:auto;padding:22px 14px 45px}.brand{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:linear-gradient(135deg,var(--a),var(--b))}.brand h1{font-size:19px;margin:0}.brand p{font-size:12px;color:var(--muted);margin:3px 0 0}.hero{text-align:center;margin:32px 0 25px}.hero h2{font-size:clamp(29px,6vw,44px);letter-spacing:-1px;line-height:1.1;margin:0 0 12px}.hero h2 span{color:#9eeadd}.hero p{color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.card{min-width:0;border:1px solid var(--line);border-radius:19px;background:#131b2ef2;padding:19px;box-shadow:0 16px 40px #0002}.card h3{margin:0 0 16px;font-size:16px}.field{margin-bottom:15px}label{display:block;font-size:13px;margin-bottom:7px;color:#dce4f5}select,textarea,input{width:100%;padding:12px;border-radius:11px;border:1px solid #34435f;background:#0c1426;color:var(--text);font:inherit;outline:none}textarea{min-height:160px;resize:vertical}select:focus,textarea:focus{border-color:var(--a)}.hint,.status{font-size:12px;line-height:1.5;color:var(--muted);margin-top:7px}.btn{border:0;border-radius:11px;padding:12px 15px;font-weight:750;font-size:14px;cursor:pointer}.start{width:100%;color:white;background:linear-gradient(100deg,var(--a),#398bff);box-shadow:0 8px 25px #805dff35}.start:disabled{opacity:.65;cursor:wait}.secondary{color:#e8edff;background:#27334c;border:1px solid #3a4a68}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.output{min-height:290px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;font-size:14px;background:#0b1222;border:1px solid var(--line);border-radius:12px;padding:14px}.notice{margin-top:14px;border-radius:11px;padding:11px 12px;background:#282419;border:1px solid #5b4c2b;color:#f0dcae;font-size:12px;line-height:1.5}.foot{text-align:center;color:#8492ad;font-size:12px;margin-top:23px}@media(max-width:720px){.grid{grid-template-columns:1fr}.hero{margin:25px 0}.card{padding:16px}.output{min-height:200px}}
+</style></head>
+<body><main class="wrap">
+<header class="brand"><div class="logo">✦</div><div><h1>AI GENERATOR PRO MAX</h1><p>Asisten kreatif bertenaga AI</p></div></header>
+<section class="hero"><h2>Ide jadi konten <span>lebih cepat.</span></h2><p>Tulis instruksi, tekan START, dan AI akan membantu menyusun hasilnya.</p></section>
+<div class="grid">
+<section class="card"><h3>⚙️ Pengaturan generator</h3>
+<div class="field"><label for="type">Jenis konten</label><select id="type"><option value="poster">Konsep poster / banner</option><option value="caption">Caption media sosial</option><option value="greeting">Ucapan resmi</option><option value="article">Artikel</option><option value="imageprompt">Prompt gambar AI</option><option value="ideas">Ide kreatif</option><option value="general">Asisten serbaguna</option></select></div>
+<div class="field"><label for="tone">Gaya bahasa</label><select id="tone"><option>Profesional</option><option>Ramah</option><option>Persuasif</option><option>Formal dan resmi</option><option>Kreatif</option><option>Singkat dan jelas</option></select></div>
+<div class="field"><label for="topic">Ide / instruksi Anda</label><textarea id="topic" placeholder="Contoh: Buat konsep poster HUT desa dengan tema gotong royong, warna merah putih, dan suasana meriah."></textarea><div class="hint">Jelaskan tema, audiens, gaya, panjang, dan informasi penting bila ada.</div></div>
+<button class="btn start" id="start">▶ START GENERATOR</button>
+<div class="notice">Versi AI ini memerlukan server dan API key yang disimpan aman di server. Jangan masukkan API key ke halaman website atau bagikan ke orang lain.</div>
+</section>
+<section class="card"><h3>✨ Hasil dari AI</h3><div id="output" class="output" aria-live="polite">Hasil AI akan muncul di sini.</div><div class="actions"><button class="btn secondary" id="copy">Salin hasil</button><button class="btn secondary" id="download">Unduh TXT</button><button class="btn secondary" id="clear">Bersihkan</button></div><p id="status" class="status">Siap digunakan setelah server AI dikonfigurasi.</p></section>
+</div><p class="foot">AI Generator Pro Max • Website responsif untuk HP dan komputer</p></main>
+<script>
+const $=id=>document.getElementById(id);
+const typeNames={poster:"Konsep poster atau banner",caption:"Caption media sosial",greeting:"Ucapan resmi",article:"Artikel",imageprompt:"Prompt gambar AI (teks prompt saja, bukan file gambar)",ideas:"Daftar ide kreatif",general:"Jawaban asisten serbaguna"};
+$("start").addEventListener("click",async()=>{
+ const topic=$("topic").value.trim();if(!topic){$("status").textContent="Masukkan ide atau instruksi terlebih dahulu.";$("topic").focus();return;}
+ $("start").disabled=true;$("start").textContent="⏳ AI SEDANG BEKERJA…";$("status").textContent="Menghubungi server AI…";$("output").textContent="Mohon tunggu, hasil sedang dibuat.";
+ try{
+  const r=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({type:$("type").value,typeName:typeNames[$("type").value],tone:$("tone").value,prompt:topic})});
+  const data=await r.json();if(!r.ok)throw new Error(data.error||"Permintaan gagal.");
+  $("output").textContent=data.text||"AI tidak mengembalikan teks."; $("status").textContent="Selesai • Hasil dibuat oleh AI.";
+ }catch(e){$("output").textContent="Belum berhasil membuat hasil.\n\n"+e.message+"\n\nPastikan server sudah dijalankan dan OPENAI_API_KEY sudah diatur di lingkungan server."; $("status").textContent="Terjadi kendala saat menghubungi AI.";}
+ finally{$("start").disabled=false;$("start").textContent="▶ START GENERATOR";}
+});
+$("copy").onclick=async()=>{try{await navigator.clipboard.writeText($("output").textContent);$("status").textContent="Hasil berhasil disalin."}catch{$("status").textContent="Salin otomatis gagal; pilih teks hasil lalu salin manual."}};
+$("download").onclick=()=>{const b=new Blob([$("output").textContent],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="hasil-ai-generator.txt";a.click();URL.revokeObjectURL(a.href)};
+$("clear").onclick=()=>{$("topic").value="";$("output").textContent="Hasil AI akan muncul di sini.";$("status").textContent="Formulir dibersihkan."};
+</script></body></html>
